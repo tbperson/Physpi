@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Full-Screen Image</title>
+<style>
+/* CSS styles to ensure full-screen image display */
+body, html {
+  margin: 0;
+  height: 100%;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+</style>
+</head>
+<body>
+  <!-- Image element where the full-screen image will be displayed -->
+  <img id="full-screen-image" alt="Image">
+
+  <script>
+    let imagePaths = [];
+    // Index of the current image being displayed
+    let currentImageIndex = 0;
+
+    // Function to fetch image paths from the server
+    function fetchImagePaths() {
+      // Fetch the text file containing image paths from the server
+      fetch('http://localhost:8000/jpeg_paths.txt')
+        .then(response => response.text())
+        // Once text is fetched, split it into an array of paths and call handleImagePaths function
+        .then(text => handleImagePaths(text.split('\n'))); // Split by newlines
+    }
+
+    // Function to handle fetched image paths
+    function handleImagePaths(paths) {
+      // Store fetched image paths in the imagePaths array
+      imagePaths = paths;
+      // Start displaying images
+      displayNextImage();
+    }
+
+    // Function to display the next image in the sequence
+    function displayNextImage() {
+      // Reference to the full-screen image element
+      const fullScreenImage = document.getElementById('full-screen-image');
+
+      // Try to set the source of the image element to the next image path
+      try {
+        fullScreenImage.src = `http://localhost:8000/${imagePaths[currentImageIndex]}`;
+        console.log("Image change successful:", fullScreenImage.src);
+      } catch (error) {
+        console.error("Image change failed:", error);
+      }
+
+      // Update currentImageIndex to point to the next image path in the array
+      currentImageIndex = (currentImageIndex + 1);
+      if (currentImageIndex == (imagePaths.length)-1) {
+        currentImageIndex = 0;
+      }
+
+      // Schedule the next image change after 60 seconds
+      setTimeout(displayNextImage,60000); // Change image every 60 seconds
+    }
+
+    // Function to fetch initial image paths and start displaying images
+    fetchImagePaths();
+
+    // This function runs every 90 seconds to check for new images
+    setInterval(() => {
+      // Fetch JSON data containing the list of JPEG files from the server
+      fetch('http://localhost:8000/list_jpeg_files')
+        .then(response => response.json())
+        // Once JSON data is fetched, extract file paths and update image display
+        .then(data => {
+          // Extract file paths from JSON data
+          const jpegFiles = data.files;
+          // Convert file paths to URLs relative to the server
+          const paths = jpegFiles.map(file => `/${file}`);
+          // Update image display with the new image paths
+          handleImagePaths(paths);
+        })
+        // Log any errors that occur during the process
+        .catch(error => console.error('Error:', error));
+    }, 90000); // Check for new images every 90 seconds
+
+   </script>
+</body>
+</html>
