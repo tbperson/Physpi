@@ -1,0 +1,1 @@
+#Image paths will appear here upon running path_creator.py
