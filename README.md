@@ -9,8 +9,9 @@ This project consists of several components that work together to display a slid
 1. **Path Creator Script (`path_creator.py`):**
    - This Python script continuously scans the current directory for JPEG files and writes their paths to a text file named `jpeg_paths.txt`.
 
-2. **HTTP Server (`http.server`):**
-   - A local HTTP server is launched using Python3's built-in `http.server` module. It serves the web page (`web_page.html`) and JPEG files to be displayed.
+2. **Backend program (`starter.py`):**
+   - A local HTTP server is launched using Python3's built-in `http.server` module. It serves the web page (`web_page.html`) and JPEG files to be displayed
+   - This also launches ('path_creator.py):**
 
 3. **Web Page (`web_page.html`):**
    - An HTML page that displays a full-screen image using client-side JavaScript.
