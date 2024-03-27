@@ -11,7 +11,7 @@ This project consists of several components that work together to display a slid
 
 2. **Backend program (`starter.py`):**
    - A local HTTP server is launched using Python3's built-in `http.server` module. It serves the web page (`web_page.html`) and JPEG files to be displayed
-   - This also launches ('path_creator.py'):**
+   - This also launches the Path Creator Script
 
 3. **Web Page (`web_page.html`):**
    - An HTML page that displays a full-screen image using client-side JavaScript.
